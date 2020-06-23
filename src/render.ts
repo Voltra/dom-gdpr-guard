@@ -1,5 +1,5 @@
 import { GdprManager, GdprGuard, GdprGuardGroup } from "gdpr-guard"
-import { ManagerRenderer, GroupRenderer, GuardRenderer, Rendered, GroupRenderFunction, ManagerRenderFunction, GuardRenderFunction } from "./Renderer"
+import { Rendered, GroupRenderFunction, ManagerRenderFunction, GuardRenderFunction } from "./Renderer"
 
 export interface RenderPayload{
 	renderManager: ManagerRenderFunction;

@@ -30,6 +30,7 @@
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
+    "diff-dom": "^4.1.6",
     "gdpr-guard": "^2.1.0"
   }
 }
