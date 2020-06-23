@@ -12,7 +12,8 @@
 		"declaration": true,
 		"declarationDir": "./lib/",
 		"lib": [
-			"esnext"
+			"esnext",
+			"dom"
 		],
 		"esModuleInterop": true,
 		"skipLibCheck": true,
