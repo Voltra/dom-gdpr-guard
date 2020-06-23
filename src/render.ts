@@ -14,18 +14,21 @@ export const render = (manager: GdprManager, payload: RenderPayload): Rendered =
 		renderGuard: rgu,
 	} = payload;
 
-	const renderGuard: GuardRenderer = function(guard: GdprGuard){
-		return rgu(renderGroup, guard);
+	const renderer = {
+		bound(method: string){
+			return this[method].bind(this);
+		},
+		renderGuard(guard: GdprGuard): Rendered{
+			return rgu(this.bound("renderGroup"), guard);
+		},
+		renderGroup(group: GdprGuardGroup): Rendered{
+			return rgr(this.bound("renderGuard"), group);
+		},
+		renderManager(manager: GdprManager): Rendered{
+			return rm(this.bound("renderGroup"), manager);
+		},
 	};
 
-	const renderGroup: GroupRenderer = function(group: GdprGuardGroup){
-		return rgr(renderGuard, group);
-	} 
 
-	const renderManager: ManagerRenderer = function(manager: GdprManager){
-		return rm(renderGroup, manager);
-	} 
-
-
-	return renderManager(manager);
+	return renderer.renderManager(manager);
 };
