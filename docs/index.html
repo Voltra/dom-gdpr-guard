@@ -129,8 +129,77 @@
 				<blockquote>
 					<p> Vanilla JavaScript binding to use gdpr-guard as efficiently and easily as possible</p>
 				</blockquote>
-				<center><img src="https://github.com/Voltra/dom-gdpr-guard/raw/master/dom-gdpr-guard.png" alt="Logo" width="250"/></center>
-				<p>//</p>
+				<center><img src="https://github.com/Voltra/dom-gdpr-guard/raw/dev/dom-gdpr-guard.png" alt="Logo" width="250"/></center>
+				<p>This library defines logic to display GDPR settings and allow to easily modify and save them.</p>
+				<p>If you need any help, you&#39;re more than welcome on my <a href="https://discordapp.com/invite/JtWAjbw">official Discord server</a> dedicated to my open-source projects.</p>
+				<p>You can read the online documentation <a href="https://voltra.github.io/gdpr-guard-local/">here</a> and take a look at a <a href="https://github.com/Voltra/dom-gdpr-guard/master/example">very simple example</a>.</p>
+				<a href="#how-to-import" id="how-to-import" style="color: inherit; text-decoration: none;">
+					<h2>How to import</h2>
+				</a>
+				<pre><code class="language-javascript"><span class="hljs-comment">//// ES6</span>
+<span class="hljs-keyword">import</span> {
+    gdprGuard, <span class="hljs-comment">// everything that gdpr-guard exports</span>
+    <span class="hljs-comment">// you could also directly import from gdpr-guard as it&#x27;s a dependency</span>
+    render,
+    renderInside,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;dom-gdpr-guard&quot;</span>
+
+<span class="hljs-comment">//// Node</span>
+<span class="hljs-keyword">const</span> {
+    gdprGuard, <span class="hljs-comment">// everything that gdpr-guard exports</span>
+    <span class="hljs-comment">// you could also directly import from gdpr-guard as it&#x27;s a dependency</span>
+    render,
+    renderInside,
+} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;dom-gdpr-guard&quot;</span>);
+
+<span class="hljs-comment">//// Browser</span>
+<span class="hljs-keyword">const</span> {
+    gdprGuard, <span class="hljs-comment">// everything that gdpr-guard exports</span>
+    render,
+    renderInside,
+} = <span class="hljs-built_in">window</span>.domGdprGuard;</code></pre>
+				<a href="#what39s-available-" id="what39s-available-" style="color: inherit; text-decoration: none;">
+					<h2>What&#39;s available ?</h2>
+				</a>
+				<pre><code class="language-typescript"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> renderInside: <span class="hljs-function">(<span class="hljs-params">target: Element, gdpr: GdprPayload, payload: RenderPayload</span>) =&gt;</span> <span class="hljs-built_in">Promise</span>&lt;ReRenderFunction&gt;;
+
+<span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> render: <span class="hljs-function">(<span class="hljs-params">gdpr: GdprPayload, payload: RenderPayload</span>) =&gt;</span> <span class="hljs-built_in">Promise</span>&lt;Rendered&gt;;
+
+<span class="hljs-keyword">declare</span> <span class="hljs-keyword">interface</span> GdprPayload{
+    savior: GdprSavior;
+    managerFactory: GdprManagerFactory;
+}
+
+<span class="hljs-comment">// render function : (subRenderFunction, savior, gdprItem) =&gt; Rendered</span>
+<span class="hljs-keyword">declare</span> <span class="hljs-keyword">interface</span> RenderPayload{
+    renderManager: ManagerRenderFunction;
+    renderGroup: GroupRenderFunction;
+    renderGuard: GuardRenderFunction;
+}
+
+<span class="hljs-keyword">type</span> Rendered = Element;
+<span class="hljs-keyword">type</span> ReRenderFunction = <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">Promise</span>&lt;<span class="hljs-built_in">void</span>&gt;;</code></pre>
+				<a href="#render" id="render" style="color: inherit; text-decoration: none;">
+					<h3>render</h3>
+				</a>
+				<p><code>render</code> is a function that allows to render the GDPR state using the provided render functions, manager factory and gdpr savior.</p>
+				<p>It returns the rendered element so that you can mount it yourself in the DOM.</p>
+				<a href="#renderinside" id="renderinside" style="color: inherit; text-decoration: none;">
+					<h3>renderInside</h3>
+				</a>
+				<p><code>renderInside</code> is a function that allows to render the GDPR state inside a container using the container as well as the provided render functions, manager factory and gdpr savior.</p>
+				<p>It returns a function that when called will smartly re-render the GDPR state to avoid the pain of manually handling updates efficiently (it uses DOM diffing).</p>
+				<a href="#savior-api" id="savior-api" style="color: inherit; text-decoration: none;">
+					<h2>Savior API</h2>
+				</a>
+				<p>The <a href="https://voltra.github.io/gdpr-guard/interfaces/gdprsavior.html">Savior API</a> is mainly designed for library developers, therefore you might need an additional library to provide with the savior you may need (e.g. <code>gdpr-guard-local</code> for local storage).</p>
+				<a href="#design-choices" id="design-choices" style="color: inherit; text-decoration: none;">
+					<h2>Design choices</h2>
+				</a>
+				<p>From a design stand point, it&#39;s been a common trend across all my libraries to expose my APIs as asynchronous if users might need to use their own asynchronous code inside. That comes from the idea that integrating asynchronous code inside code that is required to be synchronous makes it really difficult to interface properly.</p>
+				<p>As such, even though I use the term <code>return</code> in the previous descriptions, it&#39;s more accurate to say that the returned promise <strong>resolves</strong> to the described value. </p>
+				<p>That does not mean in any way that you <strong>have to</strong> return a promise, we can <code>await</code> on non-promise values and they will resolve immediately. Although, for good measures, if you can mark your functions as <code>async</code>, that would avoid any issues and the code inside would still be the same.</p>
+				<p>One of the advantages of using promises and asynchronous functions as an API designer is that error handling is &quot;covered for free&quot; with the promises&#39;s exception propagation mecanisms.</p>
 			</div>
 			<footer>
 				<div class="tsd-legend-group">
