@@ -7,7 +7,7 @@ This library defines logic to display GDPR settings and allow to easily modify a
 
 If you need any help, you're more than welcome on my [official Discord server](https://discordapp.com/invite/JtWAjbw) dedicated to my open-source projects.
 
-You can read the online documentation [here](https://voltra.github.io/gdpr-guard-local/).
+You can read the online documentation [here](https://voltra.github.io/gdpr-guard-local/) and take a look at a [very simple example](https://github.com/Voltra/dom-gdpr-guard/master/example).
 
 ## How to import
 
