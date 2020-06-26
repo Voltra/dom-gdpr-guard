@@ -33,7 +33,7 @@ export type ReRenderFunction = () => Promise<void>;
  * @returns The function to call to re-render
  */
 export const renderInside = async (target: Element, gdpr: GdprPayload, payload: RenderPayload): Promise<ReRenderFunction> => {
-	const doRender = async () => {
+	const doRender: ReRenderFunction = async () => {
 		const rendered = await render(gdpr, payload);
 		mountOnTarget(target, rendered);
 	};
