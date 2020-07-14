@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GdprPayload | dom-gdpr-guard</title>
+	<title>ReRenderResult | dom-gdpr-guard</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
@@ -57,7 +57,7 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="gdprpayload.html">GdprPayload</a>
+					<a href="rerenderresult.html">ReRenderResult</a>
 				</li>
 			</ul>
 		</div>
@@ -69,27 +69,27 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul>
 					<ul class="before-current">
+						<li class=" tsd-kind-interface">
+							<a href="gdprpayload.html" class="tsd-kind-icon">Gdpr<wbr>Payload</a>
+						</li>
+						<li class=" tsd-kind-interface">
+							<a href="gdprrenderresult.html" class="tsd-kind-icon">Gdpr<wbr>Render<wbr>Result</a>
+						</li>
 					</ul>
 					<ul class="current">
 						<li class="current tsd-kind-interface">
-							<a href="gdprpayload.html" class="tsd-kind-icon">Gdpr<wbr>Payload</a>
+							<a href="rerenderresult.html" class="tsd-kind-icon">Re<wbr>Render<wbr>Result</a>
 							<ul>
 								<li class=" tsd-kind-property tsd-parent-kind-interface">
-									<a href="gdprpayload.html#managerfactory" class="tsd-kind-icon">manager<wbr>Factory</a>
+									<a href="rerenderresult.html#manager" class="tsd-kind-icon">manager</a>
 								</li>
 								<li class=" tsd-kind-property tsd-parent-kind-interface">
-									<a href="gdprpayload.html#savior" class="tsd-kind-icon">savior</a>
+									<a href="rerenderresult.html#render" class="tsd-kind-icon">render</a>
 								</li>
 							</ul>
 						</li>
 					</ul>
 					<ul class="after-current">
-						<li class=" tsd-kind-interface">
-							<a href="gdprrenderresult.html" class="tsd-kind-icon">Gdpr<wbr>Render<wbr>Result</a>
-						</li>
-						<li class=" tsd-kind-interface">
-							<a href="rerenderresult.html" class="tsd-kind-icon">Re<wbr>Render<wbr>Result</a>
-						</li>
 						<li class=" tsd-kind-interface">
 							<a href="renderpayload.html" class="tsd-kind-icon">Render<wbr>Payload</a>
 						</li>
@@ -143,18 +143,11 @@
 			</nav>
 		</div>
 		<div class="col-9 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment">
-					<div class="lead">
-						<p>The payload required for the Savior API</p>
-					</div>
-				</div>
-			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">GdprPayload</span>
+						<span class="target">ReRenderResult</span>
 					</li>
 				</ul>
 			</section>
@@ -166,14 +159,14 @@
 							<div class="tsd-navigation secondary">
 								<ul>
 									<li class="tsd-kind-property tsd-parent-kind-interface">
-										<a href="gdprpayload.html#managerfactory" class="tsd-kind-icon">manager<wbr>Factory</a>
+										<a href="rerenderresult.html#manager" class="tsd-kind-icon">manager</a>
 									</li>
 								</ul>
 							</div>
 							<div class="tsd-navigation secondary">
 								<ul>
 									<li class="tsd-kind-property tsd-parent-kind-interface">
-										<a href="gdprpayload.html#savior" class="tsd-kind-icon">savior</a>
+										<a href="rerenderresult.html#render" class="tsd-kind-icon">render</a>
 									</li>
 								</ul>
 							</div>
@@ -184,36 +177,22 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-descriptions">
-					<a name="managerfactory" class="tsd-anchor"></a>
-					<h3>manager<wbr>Factory</h3>
-					<div class="tsd-signature tsd-kind-icon">managerFactory<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">GdprManagerFactory</span></div>
-					<div class="tsd-comment">
-						<div class="lead">
-							<p>A factory to a {@link GdprManager}</p>
-						</div>
-					</div>
-					<div class="tsd-comment">
-					</div>
+					<a name="manager" class="tsd-anchor"></a>
+					<h3>manager</h3>
+					<div class="tsd-signature tsd-kind-icon">manager<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">GdprManager</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Voltra/dom-gdpr-guard/blob/c46c2e3/src/render.ts#L36">render.ts:36</a></li>
+							<li>Defined in <a href="https://github.com/Voltra/dom-gdpr-guard/blob/c46c2e3/src/utils.ts#L30">utils.ts:30</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-descriptions">
-					<a name="savior" class="tsd-anchor"></a>
-					<h3>savior</h3>
-					<div class="tsd-signature tsd-kind-icon">savior<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">GdprSavior</span></div>
-					<div class="tsd-comment">
-						<div class="lead">
-							<p>The savior to use</p>
-						</div>
-					</div>
-					<div class="tsd-comment">
-					</div>
+					<a name="render" class="tsd-anchor"></a>
+					<h3>render</h3>
+					<div class="tsd-signature tsd-kind-icon">render<span class="tsd-signature-symbol">:</span> <a href="../globals.html#rerenderfunction" class="tsd-signature-type">ReRenderFunction</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Voltra/dom-gdpr-guard/blob/c46c2e3/src/render.ts#L31">render.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/Voltra/dom-gdpr-guard/blob/c46c2e3/src/utils.ts#L29">utils.ts:29</a></li>
 						</ul>
 					</aside>
 				</section>
