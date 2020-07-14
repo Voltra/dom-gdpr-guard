@@ -63,13 +63,26 @@ type ReRenderFunction = () => Promise<void>;
 
 `render` is a function that allows to render the GDPR state using the provided render functions, manager factory and gdpr savior.
 
-It returns the rendered element so that you can mount it yourself in the DOM.
+```typescript
+interface GdprRenderResult{
+	rendered: Rendered;
+	manager: GdprManager;
+}
+```
+It returns the rendered element so that you can mount it yourself in the DOM. It also returns the manager so that you can query its state for conditional logic.
 
 ### renderInside
 
 `renderInside` is a function that allows to render the GDPR state inside a container using the container as well as the provided render functions, manager factory and gdpr savior.
 
-It returns a function that when called will smartly re-render the GDPR state to avoid the pain of manually handling updates efficiently (it uses DOM diffing).
+```typescript
+interface ReRenderResult{
+	render: ReRenderFunction;
+	manager: GdprManager;
+}
+```
+
+It returns a function that when called will smartly re-render the GDPR state to avoid the pain of manually handling updates efficiently (it uses DOM diffing). It also returns the manager so that you can query its state for conditional logic.
 
 ## Savior API
 

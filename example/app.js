@@ -30,7 +30,10 @@ const createDescription = guard => {
 };
 
 const rehydrate = input => {
-	GDPR.smartReRender();
+    setTimeout(() => {
+        console.log("[rehydrate]");
+        GDPR.smartReRender();
+    }, 50);
 };
 
 const createSwitch = guard => {
@@ -43,12 +46,15 @@ const createSwitch = guard => {
 		switch_.setAttribute("disabled", "disabled");
 	else{
 		$switch.click(e => {
+            console.log(`[IN] guard: ${guard.name} [${guard.enabled}]`);
 			e.preventDefault();
 			if(switch_.checked)
 				guard.enable();
 			else
 				guard.disable();
 
+
+            console.log(`[OUT] guard: ${guard.name} [${guard.enabled}]`);
 			rehydrate(switch_);
 		});
 	}
@@ -149,7 +155,8 @@ class Savior extends domGdprGuard.gdprGuard.GdprSaviorAdapter{
 const savior = new Savior();
 
 (async () => {
-	GDPR.smartReRender = await domGdprGuard.renderInside(
+    console.clear();
+	const { render, manager } = await domGdprGuard.renderInside(
 		document.getElementById("app"),
 		{
 			savior,
@@ -161,7 +168,10 @@ const savior = new Savior();
 			renderGuard,
 		}
 	);
-})()
+    
+    GDPR.smartReRender = render;
+    GDPR.manager = manager;
+})();
 
 
 
