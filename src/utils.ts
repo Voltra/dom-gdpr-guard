@@ -44,7 +44,7 @@ export const renderInside = async (target: Element, gdpr: GdprPayload, payload: 
 		return manager;
 	};
 
-	const manager = await doRender();
+	const manager: GdprManager = await doRender();
 
 	return {
 		render: doRender,

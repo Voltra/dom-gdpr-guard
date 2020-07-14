@@ -70,6 +70,12 @@
 							<a href="interfaces/gdprpayload.html" class="tsd-kind-icon">Gdpr<wbr>Payload</a>
 						</li>
 						<li class=" tsd-kind-interface">
+							<a href="interfaces/gdprrenderresult.html" class="tsd-kind-icon">Gdpr<wbr>Render<wbr>Result</a>
+						</li>
+						<li class=" tsd-kind-interface">
+							<a href="interfaces/rerenderresult.html" class="tsd-kind-icon">Re<wbr>Render<wbr>Result</a>
+						</li>
+						<li class=" tsd-kind-interface">
 							<a href="interfaces/renderpayload.html" class="tsd-kind-icon">Render<wbr>Payload</a>
 						</li>
 						<li class=" tsd-kind-type-alias">
@@ -183,12 +189,20 @@
 					<h3>render</h3>
 				</a>
 				<p><code>render</code> is a function that allows to render the GDPR state using the provided render functions, manager factory and gdpr savior.</p>
-				<p>It returns the rendered element so that you can mount it yourself in the DOM.</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">interface</span> GdprRenderResult{
+    rendered: Rendered;
+    manager: GdprManager;
+}</code></pre>
+				<p>It returns the rendered element so that you can mount it yourself in the DOM. It also returns the manager so that you can query its state for conditional logic.</p>
 				<a href="#renderinside" id="renderinside" style="color: inherit; text-decoration: none;">
 					<h3>renderInside</h3>
 				</a>
 				<p><code>renderInside</code> is a function that allows to render the GDPR state inside a container using the container as well as the provided render functions, manager factory and gdpr savior.</p>
-				<p>It returns a function that when called will smartly re-render the GDPR state to avoid the pain of manually handling updates efficiently (it uses DOM diffing).</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">interface</span> ReRenderResult{
+    render: ReRenderFunction;
+    manager: GdprManager;
+}</code></pre>
+				<p>It returns a function that when called will smartly re-render the GDPR state to avoid the pain of manually handling updates efficiently (it uses DOM diffing). It also returns the manager so that you can query its state for conditional logic.</p>
 				<a href="#savior-api" id="savior-api" style="color: inherit; text-decoration: none;">
 					<h2>Savior API</h2>
 				</a>
