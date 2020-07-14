@@ -23,7 +23,12 @@ export const mountOnTarget = (target: Element, rendered: Rendered) => {
 		target.appendChild(rendered);
 };
 
-export type ReRenderFunction = () => Promise<void>;
+export type ReRenderFunction = () => Promise<GdprManager>;
+
+export interface ReRenderResult{
+	render: ReRenderFunction;
+	manager: GdprManager;
+}
 
 /**
  * Render the GDPR state inside of the given target (provides re-render function)
@@ -32,13 +37,17 @@ export type ReRenderFunction = () => Promise<void>;
  * @param payload - The render configuration
  * @returns The function to call to re-render
  */
-export const renderInside = async (target: Element, gdpr: GdprPayload, payload: RenderPayload): Promise<ReRenderFunction> => {
+export const renderInside = async (target: Element, gdpr: GdprPayload, payload: RenderPayload): Promise<ReRenderResult> => {
 	const doRender: ReRenderFunction = async () => {
-		const rendered = await render(gdpr, payload);
+		const { rendered, manager } = await render(gdpr, payload);
 		mountOnTarget(target, rendered);
+		return manager;
 	};
 
-	await doRender();
+	const manager = await doRender();
 
-	return doRender;
+	return {
+		render: doRender,
+		manager,
+	};
 }
