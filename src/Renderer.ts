@@ -11,7 +11,7 @@ export type Rendered = Element;
 /**
  * A type erased group renderer (meant to be used in guard rendering, for multi-level groups)
  */
-export type SubGroupRenderer = (...args: any[]) => Promise<Rendered>;
+export type SubGroupRenderer = (...args: unknown[]) => Promise<Rendered>;
 
 /**
  * Guard rendering partially applied function
