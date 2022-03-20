@@ -42,14 +42,11 @@ const {
 ## What's available ?
 
 ```typescript
-declare const renderInside: (target: Element, gdpr: GdprPayload, payload: RenderPayload) => Promise<ReRenderFunction>;
+import { GdprManager } from "gdpr-guard";
 
-declare const render: (gdpr: GdprPayload, payload: RenderPayload) => Promise<Rendered>;
+declare const renderInside: (target: Element, manager: GdprManager, payload: RenderPayload) => Promise<ReRenderFunction>;
 
-declare interface GdprPayload {
-	savior: GdprSavior;
-	managerFactory: GdprManagerFactory;
-}
+declare const render: (manager: GdprManager, payload: RenderPayload) => Promise<Rendered>;
 
 // render function : (subRenderFunction, savior, gdprItem) => Rendered
 declare interface RenderPayload {
@@ -99,6 +96,8 @@ The [Savior API](https://voltra.github.io/gdpr-guard/interfaces/gdprsavior.html)
 developers, therefore you might need an additional library to provide with the savior you may need (
 e.g. `gdpr-guard-local` for local storage).
 
+Since v3.0.0, you handle the savior however you wish, it is no longer part of the render API.
+
 ## Design choices
 
 From a design standpoint, it's been a common trend across all my libraries to expose my APIs as asynchronous if users
@@ -114,4 +113,15 @@ and the code inside would still be the same.
 
 One of the advantages of using promises and asynchronous functions as an API designer is that error handling is "covered
 for free" with the promises' exception propagation mechanisms.
+
+## Changelog
+
+### V3.0.0
+
+The render API was flawed: it re-generated the manager on every render. As such, a decision was made that the user of
+this library should get an instance of a `GdprManager` before rendering. As such, this package is now fully decoupled
+from the Savior API: it's no longer the render API that calls `GdprSavior` methods, the user has full control of it.
+
+The fact that you have to have a manager to render also means you can use the Events API from `gdpr-guard@^2.2.1`
+before even rendering anything, which avoids input lags and reduces time-to-first-input.
 

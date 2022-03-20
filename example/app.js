@@ -10,11 +10,13 @@
 
 const GDPR = {};
 
-const makeChildren = (guardsMap, fn) => Promise.all(Sequency
-									.asSequence(guardsMap)
-									.map(([_name, guard]) => guard)
-									.map(fn)
-									.toArray());
+const makeChildren = (guardsMap, fn) => Promise.all(
+	Sequency
+	.asSequence(guardsMap)
+	.map(([_name, guard]) => guard)
+	.map(fn)
+	.toArray()
+);
 
 const createTitle = guard => {
 	const title = document.createElement("h3");
@@ -30,10 +32,10 @@ const createDescription = guard => {
 };
 
 const rehydrate = input => {
-    setTimeout(() => {
-        console.log("[rehydrate]");
-        GDPR.smartReRender();
-    }, 50);
+	setTimeout(() => {
+		console.log("[rehydrate]");
+		GDPR.smartReRender();
+	}, 50);
 };
 
 const createSwitch = guard => {
@@ -42,19 +44,20 @@ const createSwitch = guard => {
 	switch_.checked = guard.enabled;
 	switch_.setAttribute("type", "checkbox");
 
-	if(guard.required)
+	if (guard.required) {
 		switch_.setAttribute("disabled", "disabled");
-	else{
+	} else {
 		$switch.click(e => {
-            console.log(`[IN] guard: ${guard.name} [${guard.enabled}]`);
+			console.log(`[IN] guard: ${guard.name} [${guard.enabled}]`);
 			e.preventDefault();
-			if(switch_.checked)
+			if (switch_.checked) {
 				guard.enable();
-			else
+			} else {
 				guard.disable();
+			}
 
 
-            console.log(`[OUT] guard: ${guard.name} [${guard.enabled}]`);
+			console.log(`[OUT] guard: ${guard.name} [${guard.enabled}]`);
 			rehydrate(switch_);
 		});
 	}
@@ -92,21 +95,21 @@ const createCard = (guard, children = []) => {
 	card.appendChild(cardTitle);
 	card.appendChild(cardBody);
 	return card;
-}
+};
 
-async function renderGuard(renderSubGroup, savior, guard){
+async function renderGuard(renderSubGroup, savior, guard) {
 	const children = "bindings" in guard
 		? await makeChildren(guard.bindings, renderSubGroup)
 		: [];
 	return createCard(guard, children);
 }
 
-async function renderGroup(renderGuard, savior, group){
+async function renderGroup(renderGuard, savior, group) {
 	const children = await makeChildren(group.bindings, renderGuard);
 	return createCard(group, children);
 }
 
-async function renderManager(renderGroup, savior, manager){
+async function renderManager(renderGroup, savior, manager) {
 	const children = await makeChildren(manager.groups, renderGroup);
 	return createCard(manager, children);
 }
@@ -116,46 +119,48 @@ const { GdprManagerBuilder, GdprStorage } = domGdprGuard.gdprGuard;
 const storeKey = "gdpr";
 GDPR.manager = GdprManagerBuilder.make()
 	.startRequiredGroup(GdprStorage.LocalStorage, "RGPD", "Gestion des préférences relatives à la protection des données")
-		.withEnabledGuard(storeKey, "Sauvegarde de vos préférences RGPD")
-		.withEnabledGuard(`${storeKey}__version`, "Version des paramètres RGPD")
+	.withEnabledGuard(storeKey, "Sauvegarde de vos préférences RGPD")
+	.withEnabledGuard(`${storeKey}__version`, "Version des paramètres RGPD")
 	.endGroup()
 	.startGroup(GdprStorage.Cookie, "Trafic", "Analyse du trafic des visiteurs")
-		.enabled()
-		.withEnabledGuard("_ga", "Google Analytics")
-		.startRequiredGuard()
-			.withName("vue-tabs-component.cache")
-			.withDescription("Cache d'onglet de la page tarauds et filières")
-			.storedIn(GdprStorage.LocalStorage)
-		.endGuard()
+	.enabled()
+	.withEnabledGuard("_ga", "Google Analytics")
+	.startRequiredGuard()
+	.withName("vue-tabs-component.cache")
+	.withDescription("Cache d'onglet de la page tarauds et filières")
+	.storedIn(GdprStorage.LocalStorage)
+	.endGuard()
 	.endGroup()
 	.startRequiredGroup(GdprStorage.Cookie, "Sécurité", "Mesures de sécurité")
-		.withEnabledGuard("XSRF-TOKEN", "Jeton prévenant la soumission frauduleuse de formulaire")
-		.withEnabledGuard("adonis-session", "Identifiant de session")
-		.withEnabledGuard("adonis-session-values", "Jetons de session")
-		.startRequiredGuard()
-			.withName("Adresse IP")
-			.withDescription("Utilisation dans la journalisation des visites")
-			.storedIn(GdprStorage.Server)
-		.endGuard()
+	.withEnabledGuard("XSRF-TOKEN", "Jeton prévenant la soumission frauduleuse de formulaire")
+	.withEnabledGuard("adonis-session", "Identifiant de session")
+	.withEnabledGuard("adonis-session-values", "Jetons de session")
+	.startRequiredGuard()
+	.withName("Adresse IP")
+	.withDescription("Utilisation dans la journalisation des visites")
+	.storedIn(GdprStorage.Server)
+	.endGuard()
 	.endGroup()
-.build();
+	.build();
 
 const managerFactory = () => GDPR.manager;
 
-class Savior extends domGdprGuard.gdprGuard.GdprSaviorAdapter{
-	updateSharedManager(){}
+class Savior extends domGdprGuard.gdprGuard.GdprSaviorAdapter {
+	updateSharedManager() {
+	}
 
-	restore(){
+	restore() {
 		return null;
 	}
 
-	store(){}
+	store() {
+	}
 }
 
 const savior = new Savior();
 
 (async () => {
-    console.clear();
+	console.clear();
 	const { render, manager } = await domGdprGuard.renderInside(
 		document.getElementById("app"),
 		{
@@ -166,11 +171,11 @@ const savior = new Savior();
 			renderManager,
 			renderGroup,
 			renderGuard,
-		}
+		},
 	);
-    
-    GDPR.smartReRender = render;
-    GDPR.manager = manager;
+
+	GDPR.smartReRender = render;
+	GDPR.manager = manager;
 })();
 
 
