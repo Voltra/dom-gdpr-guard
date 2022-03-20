@@ -1,6 +1,6 @@
 import { GdprManager, GdprGuard, GdprGuardGroup, GdprSavior } from "gdpr-guard";
 /**
- * The type that renderer functions producce
+ * The type that renderer functions produce
  */
 export declare type Rendered = Element;
 /**
