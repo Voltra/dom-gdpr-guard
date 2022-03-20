@@ -1,4 +1,4 @@
-import { GdprManager, GdprGuard, GdprGuardGroup, GdprSavior } from "gdpr-guard";
+import { GdprGuard, GdprGuardGroup, GdprManager } from "gdpr-guard";
 /**
  * The type that renderer functions produce
  */
@@ -20,14 +20,14 @@ export declare type GroupRenderer = (group: GdprGuardGroup) => Promise<Rendered>
  */
 export declare type ManagerRenderer = (manager: GdprManager) => Promise<Rendered>;
 /**
- * Userland guard rendering function
+ * User-land guard rendering function
  */
-export declare type GuardRenderFunction = (renderSubGroup: GroupRenderer | SubGroupRenderer, savior: GdprSavior, guard: GdprGuard) => ReturnType<GuardRenderer>;
+export declare type GuardRenderFunction = (renderSubGroup: GroupRenderer | SubGroupRenderer, guard: GdprGuard) => ReturnType<GuardRenderer>;
 /**
- * Userland group rendering function
+ * User-land group rendering function
  */
-export declare type GroupRenderFunction = (renderGuard: GuardRenderer, savior: GdprSavior, group: GdprGuardGroup) => ReturnType<GroupRenderer>;
+export declare type GroupRenderFunction = (renderGuard: GuardRenderer, group: GdprGuardGroup) => ReturnType<GroupRenderer>;
 /**
- * Userland manager rendering function
+ * User-land manager rendering function
  */
-export declare type ManagerRenderFunction = (renderGroup: GroupRenderer, savior: GdprSavior, manager: GdprManager) => ReturnType<ManagerRenderer>;
+export declare type ManagerRenderFunction = (renderGroup: GroupRenderer, manager: GdprManager) => ReturnType<ManagerRenderer>;

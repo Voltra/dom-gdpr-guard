@@ -1,10 +1,10 @@
-import { GdprManager, GdprGuard, GdprGuardGroup, GdprSavior, GdprManagerFactory } from "gdpr-guard"
-import { Rendered, GroupRenderFunction, ManagerRenderFunction, GuardRenderFunction } from "./Renderer"
+import { GdprGuard, GdprGuardGroup, GdprManager, GdprManagerFactory, GdprSavior } from "gdpr-guard"
+import { GroupRenderFunction, GuardRenderFunction, ManagerRenderFunction, Rendered } from "./Renderer"
 
 /**
  * Configuration for the render function
  */
-export interface RenderPayload{
+export interface RenderPayload {
 	/**
 	 * Manager rendering function
 	 */
@@ -22,24 +22,9 @@ export interface RenderPayload{
 }
 
 /**
- * The payload required for the Savior API
- */
-export interface GdprPayload{
-	/**
-	 * The savior to use
-	 */
-	savior: GdprSavior;
-
-	/**
-	 * A factory to a {@link GdprManager}
-	 */
-	managerFactory: GdprManagerFactory;
-}
-
-/**
  * Result of the render function
  */
-export interface GdprRenderResult{
+export interface GdprRenderResult {
 	/**
 	 * The rendered element
 	 */
@@ -53,17 +38,10 @@ export interface GdprRenderResult{
 
 /**
  * Render the current manager state (you will manually handle re-renders)
- * @param gdpr - The payload with all the GDPR data
+ * @param manager - The manager to render
  * @param payload - The render configuration
  */
-export const render = async (gdpr: GdprPayload, payload: RenderPayload): Promise<GdprRenderResult> => {
-	const {
-		savior,
-		managerFactory: factory,
-	} = gdpr;
-
-	const manager = await savior.restoreOrCreate(factory);
-
+export const render = async (manager: GdprManager, payload: RenderPayload): Promise<GdprRenderResult> => {
 	const {
 		renderManager: rm,
 		renderGroup: rgr,
@@ -72,17 +50,17 @@ export const render = async (gdpr: GdprPayload, payload: RenderPayload): Promise
 
 
 	const renderer = {
-		bound(method: string){
+		bound(method: string) {
 			return this[method].bind(this);
 		},
-		renderGuard(guard: GdprGuard): Promise<Rendered>{
-			return rgu(this.bound("renderGroup"), savior, guard);
+		renderGuard(guard: GdprGuard): Promise<Rendered> {
+			return rgu(this.bound("renderGroup"), guard);
 		},
-		renderGroup(group: GdprGuardGroup): Promise<Rendered>{
-			return rgr(this.bound("renderGuard"), savior, group);
+		renderGroup(group: GdprGuardGroup): Promise<Rendered> {
+			return rgr(this.bound("renderGuard"), group);
 		},
-		renderManager(manager: GdprManager): Promise<Rendered>{
-			return rm(this.bound("renderGroup"), savior, manager);
+		renderManager(manager: GdprManager): Promise<Rendered> {
+			return rm(this.bound("renderGroup"), manager);
 		},
 	};
 

@@ -1,5 +1,5 @@
 import { GdprManager } from "gdpr-guard";
-import { RenderPayload, render, GdprPayload } from "./render";
+import { render, RenderPayload } from "./render";
 import { Rendered } from "./Renderer";
 import { DiffDOM } from "diff-dom";
 
@@ -15,17 +15,17 @@ const diffing = new DiffDOM();
  * @param rendered - The rendered element to mount
  */
 export const mountOnTarget = (target: Element, rendered: Rendered) => {
-	if(target.childElementCount){
+	if (target.childElementCount) {
 		const diffSource = target.children.item(0);
 		const diff = diffing.diff(diffSource, rendered);
 		diffing.apply(diffSource, diff);
-	}else // for very first render (otherwise diff root is !=)
+	} else // for very first render (otherwise diff root is !=)
 		target.appendChild(rendered);
 };
 
-export type ReRenderFunction = () => Promise<GdprManager>;
+export type ReRenderFunction = () => Promise<void>;
 
-export interface ReRenderResult{
+export interface ReRenderResult {
 	render: ReRenderFunction;
 	manager: GdprManager;
 }
@@ -33,18 +33,17 @@ export interface ReRenderResult{
 /**
  * Render the GDPR state inside of the given target (provides re-render function)
  * @param target - The target in which the rendered element will be mounted
- * @param gdpr - The payload with all the GDPR data
+ * @param manager - The manager to render
  * @param payload - The render configuration
  * @returns The function to call to re-render
  */
-export const renderInside = async (target: Element, gdpr: GdprPayload, payload: RenderPayload): Promise<ReRenderResult> => {
+export const renderInside = async (target: Element, manager: GdprManager, payload: RenderPayload): Promise<ReRenderResult> => {
 	const doRender: ReRenderFunction = async () => {
-		const { rendered, manager } = await render(gdpr, payload);
+		const { rendered } = await render(manager, payload);
 		mountOnTarget(target, rendered);
-		return manager;
 	};
 
-	const manager: GdprManager = await doRender();
+	await doRender();
 
 	return {
 		render: doRender,

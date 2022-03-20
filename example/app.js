@@ -10,11 +10,13 @@
 
 const GDPR = {};
 
-const makeChildren = (guardsMap, fn) => Promise.all(Sequency
-									.asSequence(guardsMap)
-									.map(([_name, guard]) => guard)
-									.map(fn)
-									.toArray());
+const makeChildren = (guardsMap, fn) => Promise.all(
+	Sequency
+	.asSequence(guardsMap)
+	.map(([_name, guard]) => guard)
+	.map(fn)
+	.toArray()
+);
 
 const createTitle = guard => {
 	const title = document.createElement("h3");
@@ -30,10 +32,10 @@ const createDescription = guard => {
 };
 
 const rehydrate = input => {
-    setTimeout(() => {
-        console.log("[rehydrate]");
-        GDPR.smartReRender();
-    }, 50);
+	setTimeout(() => {
+		console.log("[rehydrate]");
+		GDPR.smartReRender();
+	}, 50);
 };
 
 const createSwitch = guard => {
@@ -42,19 +44,20 @@ const createSwitch = guard => {
 	switch_.checked = guard.enabled;
 	switch_.setAttribute("type", "checkbox");
 
-	if(guard.required)
+	if (guard.required) {
 		switch_.setAttribute("disabled", "disabled");
-	else{
+	} else {
 		$switch.click(e => {
-            console.log(`[IN] guard: ${guard.name} [${guard.enabled}]`);
+			console.log(`[IN] guard: ${guard.name} [${guard.enabled}]`);
 			e.preventDefault();
-			if(switch_.checked)
+			if (switch_.checked) {
 				guard.enable();
-			else
+			} else {
 				guard.disable();
+			}
 
 
-            console.log(`[OUT] guard: ${guard.name} [${guard.enabled}]`);
+			console.log(`[OUT] guard: ${guard.name} [${guard.enabled}]`);
 			rehydrate(switch_);
 		});
 	}
@@ -92,26 +95,26 @@ const createCard = (guard, children = []) => {
 	card.appendChild(cardTitle);
 	card.appendChild(cardBody);
 	return card;
-}
+};
 
-async function renderGuard(renderSubGroup, savior, guard){
+async function renderGuard(renderSubGroup, guard) {
 	const children = "bindings" in guard
 		? await makeChildren(guard.bindings, renderSubGroup)
 		: [];
 	return createCard(guard, children);
 }
 
-async function renderGroup(renderGuard, savior, group){
+async function renderGroup(renderGuard, group) {
 	const children = await makeChildren(group.bindings, renderGuard);
 	return createCard(group, children);
 }
 
-async function renderManager(renderGroup, savior, manager){
+async function renderManager(renderGroup, manager) {
 	const children = await makeChildren(manager.groups, renderGroup);
 	return createCard(manager, children);
 }
 
-const { GdprManagerBuilder, GdprStorage } = domGdprGuard.gdprGuard;
+const { GdprManagerBuilder, GdprStorage, GdprSaviorAdapter } = domGdprGuard.gdprGuard;
 
 const storeKey = "gdpr";
 GDPR.manager = GdprManagerBuilder.make()
@@ -120,7 +123,7 @@ GDPR.manager = GdprManagerBuilder.make()
 		.withEnabledGuard(`${storeKey}__version`, "Version des paramètres RGPD")
 	.endGroup()
 	.startGroup(GdprStorage.Cookie, "Trafic", "Analyse du trafic des visiteurs")
-		.enabled()
+	.enabled()
 		.withEnabledGuard("_ga", "Google Analytics")
 		.startRequiredGuard()
 			.withName("vue-tabs-component.cache")
@@ -142,35 +145,70 @@ GDPR.manager = GdprManagerBuilder.make()
 
 const managerFactory = () => GDPR.manager;
 
-class Savior extends domGdprGuard.gdprGuard.GdprSaviorAdapter{
-	updateSharedManager(){}
+class Savior extends GdprSaviorAdapter {
+	updateSharedManager() {
+	}
 
-	restore(){
+	restore() {
 		return null;
 	}
 
-	store(){}
+	store() {
+	}
 }
 
 const savior = new Savior();
 
 (async () => {
-    console.clear();
-	const { render, manager } = await domGdprGuard.renderInside(
+	console.clear();
+
+	const $footer = $("footer");
+	const $rejectAll = $footer.find("#reject");
+	const $acceptAll = $footer.find("#accept");
+	const $ok = $footer.find("#ok");
+
+	const closeBanner = () => {
+		savior.store();
+		GDPR.manager.closeBanner();
+		$footer.hide();
+	};
+
+	$rejectAll.click(e => {
+		e.preventDefault();
+		GDPR.manager.disable();
+		closeBanner();
+	});
+
+	$acceptAll.click(e => {
+		e.preventDefault();
+		GDPR.manager.enable();
+		closeBanner();
+	});
+
+	$ok.click(e => {
+		e.preventDefault();
+		closeBanner();
+	});
+
+	GDPR.manager.events.onEnable("_ga", () => {
+		console.log("At this point, you would load Google Analytics' scripts");
+	});
+
+	GDPR.manager.events.onDisable("_ga", () => {
+		console.log("At this point, you would remove all traces of Google Analytics if it were already loaded");
+	});
+
+	const { render } = await domGdprGuard.renderInside(
 		document.getElementById("app"),
-		{
-			savior,
-			managerFactory,
-		},
+		GDPR.manager,
 		{
 			renderManager,
 			renderGroup,
 			renderGuard,
-		}
+		},
 	);
-    
-    GDPR.smartReRender = render;
-    GDPR.manager = manager;
+
+	GDPR.smartReRender = render;
 })();
 
 
