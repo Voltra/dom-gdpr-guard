@@ -45,7 +45,7 @@ export interface GdprRenderResult {
 }
 /**
  * Render the current manager state (you will manually handle re-renders)
- * @param manager - The manager state to use for rendering
+ * @param gdpr - The payload with all the GDPR data
  * @param payload - The render configuration
  */
 export declare const render: (gdpr: GdprPayload, payload: RenderPayload) => Promise<GdprRenderResult>;
