@@ -6,5 +6,6 @@
 **/typedoc.config.js
 src
 demo
+example
 docs
 *.png

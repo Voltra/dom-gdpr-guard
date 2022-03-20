@@ -97,55 +97,55 @@ const createCard = (guard, children = []) => {
 	return card;
 };
 
-async function renderGuard(renderSubGroup, savior, guard) {
+async function renderGuard(renderSubGroup, guard) {
 	const children = "bindings" in guard
 		? await makeChildren(guard.bindings, renderSubGroup)
 		: [];
 	return createCard(guard, children);
 }
 
-async function renderGroup(renderGuard, savior, group) {
+async function renderGroup(renderGuard, group) {
 	const children = await makeChildren(group.bindings, renderGuard);
 	return createCard(group, children);
 }
 
-async function renderManager(renderGroup, savior, manager) {
+async function renderManager(renderGroup, manager) {
 	const children = await makeChildren(manager.groups, renderGroup);
 	return createCard(manager, children);
 }
 
-const { GdprManagerBuilder, GdprStorage } = domGdprGuard.gdprGuard;
+const { GdprManagerBuilder, GdprStorage, GdprSaviorAdapter } = domGdprGuard.gdprGuard;
 
 const storeKey = "gdpr";
 GDPR.manager = GdprManagerBuilder.make()
 	.startRequiredGroup(GdprStorage.LocalStorage, "RGPD", "Gestion des préférences relatives à la protection des données")
-	.withEnabledGuard(storeKey, "Sauvegarde de vos préférences RGPD")
-	.withEnabledGuard(`${storeKey}__version`, "Version des paramètres RGPD")
+		.withEnabledGuard(storeKey, "Sauvegarde de vos préférences RGPD")
+		.withEnabledGuard(`${storeKey}__version`, "Version des paramètres RGPD")
 	.endGroup()
 	.startGroup(GdprStorage.Cookie, "Trafic", "Analyse du trafic des visiteurs")
 	.enabled()
-	.withEnabledGuard("_ga", "Google Analytics")
-	.startRequiredGuard()
-	.withName("vue-tabs-component.cache")
-	.withDescription("Cache d'onglet de la page tarauds et filières")
-	.storedIn(GdprStorage.LocalStorage)
-	.endGuard()
+		.withEnabledGuard("_ga", "Google Analytics")
+		.startRequiredGuard()
+			.withName("vue-tabs-component.cache")
+			.withDescription("Cache d'onglet de la page tarauds et filières")
+			.storedIn(GdprStorage.LocalStorage)
+		.endGuard()
 	.endGroup()
 	.startRequiredGroup(GdprStorage.Cookie, "Sécurité", "Mesures de sécurité")
-	.withEnabledGuard("XSRF-TOKEN", "Jeton prévenant la soumission frauduleuse de formulaire")
-	.withEnabledGuard("adonis-session", "Identifiant de session")
-	.withEnabledGuard("adonis-session-values", "Jetons de session")
-	.startRequiredGuard()
-	.withName("Adresse IP")
-	.withDescription("Utilisation dans la journalisation des visites")
-	.storedIn(GdprStorage.Server)
-	.endGuard()
+		.withEnabledGuard("XSRF-TOKEN", "Jeton prévenant la soumission frauduleuse de formulaire")
+		.withEnabledGuard("adonis-session", "Identifiant de session")
+		.withEnabledGuard("adonis-session-values", "Jetons de session")
+		.startRequiredGuard()
+			.withName("Adresse IP")
+			.withDescription("Utilisation dans la journalisation des visites")
+			.storedIn(GdprStorage.Server)
+		.endGuard()
 	.endGroup()
-	.build();
+.build();
 
 const managerFactory = () => GDPR.manager;
 
-class Savior extends domGdprGuard.gdprGuard.GdprSaviorAdapter {
+class Savior extends GdprSaviorAdapter {
 	updateSharedManager() {
 	}
 
@@ -161,12 +161,46 @@ const savior = new Savior();
 
 (async () => {
 	console.clear();
-	const { render, manager } = await domGdprGuard.renderInside(
+
+	const $footer = $("footer");
+	const $rejectAll = $footer.find("#reject");
+	const $acceptAll = $footer.find("#accept");
+	const $ok = $footer.find("#ok");
+
+	const closeBanner = () => {
+		savior.store();
+		GDPR.manager.closeBanner();
+		$footer.hide();
+	};
+
+	$rejectAll.click(e => {
+		e.preventDefault();
+		GDPR.manager.disable();
+		closeBanner();
+	});
+
+	$acceptAll.click(e => {
+		e.preventDefault();
+		GDPR.manager.enable();
+		closeBanner();
+	});
+
+	$ok.click(e => {
+		e.preventDefault();
+		closeBanner();
+	});
+
+	GDPR.manager.events.onEnable("_ga", () => {
+		console.log("At this point, you would load Google Analytics' scripts");
+	});
+
+	GDPR.manager.events.onDisable("_ga", () => {
+		console.log("At this point, you would remove all traces of Google Analytics if it were already loaded");
+	});
+
+	const { render } = await domGdprGuard.renderInside(
 		document.getElementById("app"),
-		{
-			savior,
-			managerFactory,
-		},
+		GDPR.manager,
 		{
 			renderManager,
 			renderGroup,
@@ -175,7 +209,6 @@ const savior = new Savior();
 	);
 
 	GDPR.smartReRender = render;
-	GDPR.manager = manager;
 })();
 
 
