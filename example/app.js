@@ -117,7 +117,7 @@ async function renderManager(renderGroup, manager) {
 const { GdprManagerBuilder, GdprStorage, GdprSaviorAdapter } = domGdprGuard.gdprGuard;
 
 const storeKey = "gdpr";
-GDPR.manager = GdprManagerBuilder.make()
+const manager = GdprManagerBuilder.make()
 	.startRequiredGroup(GdprStorage.LocalStorage, "RGPD", "Gestion des préférences relatives à la protection des données")
 		.withEnabledGuard(storeKey, "Sauvegarde de vos préférences RGPD")
 		.withEnabledGuard(`${storeKey}__version`, "Version des paramètres RGPD")
@@ -143,7 +143,7 @@ GDPR.manager = GdprManagerBuilder.make()
 	.endGroup()
 .build();
 
-const managerFactory = () => GDPR.manager;
+const managerFactory = () => manager;
 
 class Savior extends GdprSaviorAdapter {
 	updateSharedManager() {
@@ -161,6 +161,8 @@ const savior = new Savior();
 
 (async () => {
 	console.clear();
+
+	GDPR.manager = await savior.restoreOrCreate(managerFactory);
 
 	const $footer = $("footer");
 	const $rejectAll = $footer.find("#reject");
