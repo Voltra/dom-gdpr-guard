@@ -1,10 +1,7 @@
 import { GdprManager, GdprGuard, GdprGuardGroup, GdprSavior } from "gdpr-guard"
 
-//TODO: Allow to have a reference to the parent in renderers
-//TODO: Make use of the Savior API
-
 /**
- * The type that renderer functions producce
+ * The type that renderer functions produce
  */
 export type Rendered = Element;
 

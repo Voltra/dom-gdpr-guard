@@ -29,7 +29,7 @@ export interface GdprPayload{
 	 * The savior to use
 	 */
 	savior: GdprSavior;
-	
+
 	/**
 	 * A factory to a {@link GdprManager}
 	 */
@@ -44,7 +44,7 @@ export interface GdprRenderResult{
 	 * The rendered element
 	 */
 	rendered: Rendered;
-	
+
 	/**
 	 * The manager used to render
 	 */
@@ -53,7 +53,7 @@ export interface GdprRenderResult{
 
 /**
  * Render the current manager state (you will manually handle re-renders)
- * @param manager - The manager state to use for rendering
+ * @param gdpr - The payload with all the GDPR data
  * @param payload - The render configuration
  */
 export const render = async (gdpr: GdprPayload, payload: RenderPayload): Promise<GdprRenderResult> => {
@@ -69,6 +69,7 @@ export const render = async (gdpr: GdprPayload, payload: RenderPayload): Promise
 		renderGroup: rgr,
 		renderGuard: rgu,
 	} = payload;
+
 
 	const renderer = {
 		bound(method: string){
@@ -87,6 +88,7 @@ export const render = async (gdpr: GdprPayload, payload: RenderPayload): Promise
 
 
 	const rendered = await renderer.renderManager(manager);
+
 	return {
 		rendered,
 		manager,
