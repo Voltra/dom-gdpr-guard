@@ -1,9 +1,24 @@
 {
 	"name": "dom-gdpr-guard",
-	"version": "3.0.1",
+	"version": "3.0.2",
 	"description": "Vanilla JavaScript binding to use gdpr-guard as efficiently and easily as possible",
 	"main": "dist/index.js",
 	"types": "lib/index.d.ts",
+	"keywords": [
+		"gdpr",
+		"dom",
+		"html",
+		"js",
+		"reactive",
+		"render",
+		"cookies",
+		"cookie",
+		"notice",
+		"banner",
+		"consent",
+		"tracking",
+		"rgpd"
+	],
 	"scripts": {
 		"dev": "webpack --mode development",
 		"build": "webpack --mode production",
