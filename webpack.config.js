@@ -34,5 +34,6 @@ module.exports = {
 		path: here("dist"),
 		library: "domGdprGuard",
 		libraryTarget: "umd",
+		globalObject: "typeof self !== 'undefined' ? self : typeof window !== 'undefined' ? window : this",
 	},
 };
