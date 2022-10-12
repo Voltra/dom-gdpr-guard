@@ -50,7 +50,7 @@ export const render = async (manager: GdprManager, payload: RenderPayload): Prom
 
 
 	const renderer = {
-		bound(method: string) {
+		bound(method: keyof typeof renderer) {
 			return this[method].bind(this);
 		},
 		renderGuard(guard: GdprGuard): Promise<Rendered> {
