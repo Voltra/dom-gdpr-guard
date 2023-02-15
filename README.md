@@ -116,6 +116,10 @@ for free" with the promises' exception propagation mechanisms.
 
 ## Changelog
 
+### V3.1.0
+
+Fixing the deserialization issues caused by bugged versions of gdpr-guard (updated it to 2.3.0).
+
 ### V3.0.0
 
 The render API was flawed: it re-generated the manager on every render. As such, a decision was made that the user of
