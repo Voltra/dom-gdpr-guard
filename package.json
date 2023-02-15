@@ -1,6 +1,6 @@
 {
 	"name": "dom-gdpr-guard",
-	"version": "3.0.4",
+	"version": "3.1.0",
 	"description": "Vanilla JavaScript binding to use gdpr-guard as efficiently and easily as possible",
 	"main": "dist/index.js",
 	"types": "lib/index.d.ts",
