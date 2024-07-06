@@ -13,7 +13,7 @@ export interface ReRenderResult {
     manager: GdprManager;
 }
 /**
- * Render the GDPR state inside of the given target (provides re-render function)
+ * Render the GDPR state inside the given target (provides re-render function)
  * @param target - The target in which the rendered element will be mounted
  * @param manager - The manager to render
  * @param payload - The render configuration
