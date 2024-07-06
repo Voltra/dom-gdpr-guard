@@ -16,7 +16,7 @@ const diffing = new DiffDOM();
  */
 export const mountOnTarget = (target: Element, rendered: Rendered) => {
 	if (target.childElementCount) {
-		const diffSource = target.children.item(0);
+		const diffSource = target.children.item(0)!;
 		const diff = diffing.diff(diffSource, rendered);
 		diffing.apply(diffSource, diff);
 	} else // for very first render (otherwise diff root is !=)
@@ -31,7 +31,7 @@ export interface ReRenderResult {
 }
 
 /**
- * Render the GDPR state inside of the given target (provides re-render function)
+ * Render the GDPR state inside the given target (provides re-render function)
  * @param target - The target in which the rendered element will be mounted
  * @param manager - The manager to render
  * @param payload - The render configuration
